@@ -13,7 +13,6 @@ public class Main {
         controller.addElevatorEvent(1, new FloorReachedEvent(3));
         controller.addElevatorEvent(1, new DoorTimeoutEvent());
         controller.addElevatorEvent(1, new FloorReachedEvent(5));
-
-
+        controller.addElevatorEvent(1, new DoorTimeoutEvent());
     }
 }

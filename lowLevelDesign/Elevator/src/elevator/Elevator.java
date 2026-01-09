@@ -17,7 +17,7 @@ public class Elevator implements Runnable {
     private ElevatorState state;
     private final Set<Integer> upwardStops = new HashSet<>();
     private final Set<Integer> downStops = new HashSet<>();
-    private BlockingDeque<Event> eventQueue;
+    private final BlockingDeque<Event> eventQueue;
 
     public Elevator(int id) {
         this.id = id;
@@ -42,6 +42,7 @@ public class Elevator implements Runnable {
     }
 
     public boolean shouldStop() {
+        System.out.println(upwardStops);
         if (movingDirection == Direction.UP) {
             return upwardStops.contains(currentFloor);
         } else {
@@ -67,13 +68,13 @@ public class Elevator implements Runnable {
 
     @Override
     public void run() {
-        // Elevator operation logic
         while(true) {
             try {
                 System.out.println("Elevator " + id + " waiting for event...");
                 Event event = eventQueue.take();
                 state.handleState(this, event);
             } catch (InterruptedException e) {
+                System.out.println("Elevator " + id + " interrupted.");
                 Thread.currentThread().interrupt();
                 break;
             }
@@ -84,13 +85,13 @@ public class Elevator implements Runnable {
         eventQueue.offer(event);
     }
 
-    public void removeFloor(int currentFloor) {
+    public void removeFloor(int floor) {
         if (movingDirection == Direction.UP) {
-            upwardStops.remove(currentFloor);
+            System.out.println("Elevator " + id + " removed floor " + floor);
+            upwardStops.remove(floor);
         } else {
-            downStops.remove(currentFloor);
+            downStops.remove(floor);
         }
-
     }
 
     public boolean hasPendingRequests() {
